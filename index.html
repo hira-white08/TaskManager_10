@@ -79,14 +79,16 @@
               <p class="section-kicker">ASSIGNMENTS</p>
               <h2 id="task-list-title">タスク一覧</h2>
             </div>
-            <span class="count-badge">0件</span>
+            <span class="count-badge" id="task-count">0件</span>
           </div>
 
-          <div class="empty-state">
-            <div class="empty-icon" aria-hidden="true">✓</div>
-            <h3>タスクはまだありません</h3>
-            <p>課題を登録すると、ここに一覧で表示されます。</p>
-            <button class="text-button" type="button" data-page="task">最初のタスクを追加する →</button>
+          <div class="task-list" id="task-list" aria-live="polite">
+            <div class="empty-state">
+              <div class="empty-icon" aria-hidden="true">✓</div>
+              <h3>タスクはまだありません</h3>
+              <p>課題を登録すると、ここに一覧で表示されます。</p>
+              <button class="text-button" type="button" data-page="task">最初のタスクを追加する →</button>
+            </div>
           </div>
         </section>
 
@@ -165,23 +167,24 @@
           <button class="button button-secondary" type="button" data-page="main">戻る</button>
           <button class="button button-primary" type="submit">登録する</button>
         </div>
-        <p class="form-note field-full">この段階ではタスクは保存されません。</p>
+        <p class="form-note field-full">登録内容はページを閉じると消去されます。</p>
       </form>
     </section>
   </main>
 
   <template id="task-card-template">
     <article class="task-card">
-      <h3 data-task-title></h3>
-      <dl>
-        <div><dt>締切</dt><dd data-task-deadline></dd></div>
-        <div><dt>所要時間</dt><dd data-task-duration></dd></div>
-      </dl>
-      <p data-task-memo></p>
+      <div class="task-card-content">
+        <h3 data-task-title></h3>
+        <dl class="task-meta">
+          <div><dt>締切</dt><dd data-task-deadline></dd></div>
+          <div><dt>所要時間</dt><dd data-task-duration></dd></div>
+        </dl>
+        <p class="task-memo" data-task-memo></p>
+      </div>
       <div class="task-actions">
-        <button type="button">完了</button>
-        <button type="button" data-overdue-action>未完了</button>
-        <button type="button">削除</button>
+        <button class="task-button task-button-complete" type="button" data-action="complete">完了</button>
+        <button class="task-button task-button-delete" type="button" data-action="delete">削除</button>
       </div>
     </article>
   </template>
