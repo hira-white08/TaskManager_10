@@ -53,11 +53,14 @@ function initializeApp() {
     }).format(date);
   }
 
-  function isTaskOverdue(deadline) {
+  function isOverdue(task) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const deadlineDate = new Date(deadline + "T00:00:00");
+    const [year, month, day] = task.deadline.split("-").map(Number);
+    const deadlineDate = new Date(year, month - 1, day);
+    deadlineDate.setHours(0, 0, 0, 0);
+
     return deadlineDate < today;
   }
 
@@ -96,17 +99,32 @@ function initializeApp() {
     }
 
     const sortedTasks = [...tasks].sort((firstTask, secondTask) => {
-      return Number(isTaskOverdue(secondTask.deadline)) -
-        Number(isTaskOverdue(firstTask.deadline));
+      const firstIsOverdue = isOverdue(firstTask);
+      const secondIsOverdue = isOverdue(secondTask);
+
+      if (firstIsOverdue === secondIsOverdue) return 0;
+      return firstIsOverdue ? -1 : 1;
     });
 
     sortedTasks.forEach((task) => {
       const taskCard = taskCardTemplate.content.firstElementChild.cloneNode(true);
-      const isOverdue = isTaskOverdue(task.deadline);
+      const taskIsOverdue = isOverdue(task);
 
       taskCard.dataset.taskId = String(task.id);
-      taskCard.classList.toggle("is-overdue", isOverdue);
-      taskCard.querySelector('[data-action="missed"]').hidden = !isOverdue;
+
+      if (taskIsOverdue) {
+        taskCard.classList.add("overdue");
+
+        const missedButton = document.createElement("button");
+        missedButton.className = "task-button task-button-missed";
+        missedButton.type = "button";
+        missedButton.dataset.action = "missed";
+        missedButton.textContent = "未完了";
+
+        const actionArea = taskCard.querySelector(".task-actions");
+        const deleteButton = taskCard.querySelector('[data-action="delete"]');
+        actionArea.insertBefore(missedButton, deleteButton);
+      }
 
       taskCard.querySelector("[data-task-title]").textContent = task.title;
       taskCard.querySelector("[data-task-deadline]").textContent = formatDeadline(task.deadline);
