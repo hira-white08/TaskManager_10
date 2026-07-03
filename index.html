@@ -149,19 +149,19 @@
       <form id="task-form" class="panel task-form">
         <label class="field field-full">
           <span>課題名 <em>必須</em></span>
-          <input name="title" type="text" placeholder="例：心理学レポート" required>
+          <input id="task-title-input" name="title" type="text" placeholder="例：心理学レポート" required>
         </label>
         <label class="field">
           <span>締切日 <em>必須</em></span>
-          <input name="deadline" type="date" required>
+          <input id="task-deadline-input" name="deadline" type="date" required>
         </label>
         <label class="field">
           <span>所要時間（分） <em>必須</em></span>
-          <input name="duration" type="number" min="1" step="1" placeholder="例：90" required>
+          <input id="task-duration-input" name="duration" type="number" min="1" step="1" placeholder="例：90" required>
         </label>
         <label class="field field-full">
           <span>メモ</span>
-          <textarea name="memo" rows="5" placeholder="提出形式や参考資料など"></textarea>
+          <textarea id="task-memo-input" name="memo" rows="5" placeholder="提出形式や参考資料など"></textarea>
         </label>
         <div class="form-actions field-full">
           <button class="button button-secondary" type="button" data-page="main">戻る</button>
