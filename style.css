@@ -225,12 +225,15 @@ h1 { margin-bottom: 10px; font-size: clamp(32px, 5vw, 52px); line-height: 1.15; 
 
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 310px 1fr 290px;
+  grid-template-columns: 310px 290px minmax(0, 1fr);
+  grid-template-areas:
+    "character gacha tasks"
+    "character cups tasks";
   gap: 20px;
   align-items: stretch;
 }
 
-.character-card { grid-row: span 2; overflow: hidden; }
+.character-card { grid-area: character; overflow: hidden; }
 .level-badge { display: block; width: fit-content; margin: 22px 22px 0; padding: 7px 13px; color: var(--mint-dark); border-radius: 999px; background: #e1f7f0; font-size: 11px; font-weight: 800; }
 .level-badge strong { font-size: 15px; }
 
@@ -295,7 +298,7 @@ h1 { margin-bottom: 10px; font-size: clamp(32px, 5vw, 52px); line-height: 1.15; 
 .character-copy h2 { margin-bottom: 7px; font-size: 20px; }
 .character-copy p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
 
-.task-panel { grid-row: span 2; min-height: 520px; padding: 24px; }
+.task-panel { grid-area: tasks; min-height: 520px; padding: 24px; }
 
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
 .section-heading h2 { margin-bottom: 0; font-size: 20px; }
@@ -329,7 +332,7 @@ h1 { margin-bottom: 10px; font-size: clamp(32px, 5vw, 52px); line-height: 1.15; 
 .empty-state p { color: var(--muted); font-size: 13px; line-height: 1.7; }
 .text-button { padding: 0; color: var(--mint-dark); border: 0; background: transparent; font-size: 13px; font-weight: 800; cursor: pointer; }
 
-.gacha-card { padding: 22px; }
+.gacha-card { grid-area: gacha; padding: 22px; }
 
 .ball-area {
   min-height: 135px;
@@ -343,7 +346,7 @@ h1 { margin-bottom: 10px; font-size: clamp(32px, 5vw, 52px); line-height: 1.15; 
 
 .ball-area p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; text-align: center; }
 
-.cups-area { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cups-area { grid-area: cups; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .cup-card {
   min-height: 205px;
@@ -415,10 +418,13 @@ h1 { margin-bottom: 10px; font-size: clamp(32px, 5vw, 52px); line-height: 1.15; 
 .task-card.is-overdue { border: 2px solid var(--coral); }
 
 @media (max-width: 1000px) {
-  .dashboard-grid { grid-template-columns: 280px 1fr; }
-  .task-panel { grid-row: span 1; }
-  .gacha-card { grid-column: 1; }
-  .cups-area { grid-column: 2; }
+  .dashboard-grid {
+    grid-template-columns: 280px minmax(0, 1fr);
+    grid-template-areas:
+      "character tasks"
+      "gacha tasks"
+      "cups tasks";
+  }
 }
 
 @media (max-width: 760px) {
@@ -430,9 +436,14 @@ h1 { margin-bottom: 10px; font-size: clamp(32px, 5vw, 52px); line-height: 1.15; 
   .dashboard-page { padding-top: 34px; }
   .page-heading { align-items: flex-start; flex-direction: column; }
   .page-heading .button { width: 100%; }
-  .dashboard-grid { grid-template-columns: 1fr; }
-  .character-card, .task-panel { grid-row: auto; }
-  .gacha-card, .cups-area { grid-column: auto; }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "character"
+      "gacha"
+      "cups"
+      "tasks";
+  }
   .task-panel { min-height: 410px; }
   .task-form-page { padding-top: 35px; }
   .task-form { grid-template-columns: 1fr; padding: 26px 22px; }
