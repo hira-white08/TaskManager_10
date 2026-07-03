@@ -53,6 +53,14 @@ function initializeApp() {
     }).format(date);
   }
 
+  function isTaskOverdue(deadline) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const deadlineDate = new Date(deadline + "T00:00:00");
+    return deadlineDate < today;
+  }
+
   function createEmptyState() {
     const emptyState = document.createElement("div");
     emptyState.className = "empty-state";
@@ -87,9 +95,18 @@ function initializeApp() {
       return;
     }
 
-    tasks.forEach((task) => {
+    const sortedTasks = [...tasks].sort((firstTask, secondTask) => {
+      return Number(isTaskOverdue(secondTask.deadline)) -
+        Number(isTaskOverdue(firstTask.deadline));
+    });
+
+    sortedTasks.forEach((task) => {
       const taskCard = taskCardTemplate.content.firstElementChild.cloneNode(true);
+      const isOverdue = isTaskOverdue(task.deadline);
+
       taskCard.dataset.taskId = String(task.id);
+      taskCard.classList.toggle("is-overdue", isOverdue);
+      taskCard.querySelector('[data-action="missed"]').hidden = !isOverdue;
 
       taskCard.querySelector("[data-task-title]").textContent = task.title;
       taskCard.querySelector("[data-task-deadline]").textContent = formatDeadline(task.deadline);
