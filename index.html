@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="課題を楽しく管理する大学生向けタスク管理アプリ">
+  <title>Task Capsule</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <button class="brand" type="button" data-page="main" aria-label="メインページへ">
+      <span class="brand-icon" aria-hidden="true"></span>
+      <span>Task Capsule</span>
+    </button>
+    <span class="page-label" id="page-label">はじめる</span>
+  </header>
+
+  <main class="app">
+    <section class="page welcome-page is-active" id="welcome-page" aria-labelledby="welcome-title">
+      <div class="welcome-art" aria-hidden="true">
+        <div class="gacha-machine">
+          <div class="gacha-window">
+            <i class="ball ball-yellow"></i>
+            <i class="ball ball-blue"></i>
+            <i class="ball ball-pink"></i>
+          </div>
+          <div class="gacha-base"></div>
+        </div>
+      </div>
+
+      <div class="panel welcome-panel">
+        <p class="eyebrow">YOUR CAMPUS COMPANION</p>
+        <h1 id="welcome-title">ようこそ！</h1>
+        <p class="lead">課題を整理して、やる気を貯めよう。</p>
+
+        <form id="profile-form" class="form-grid">
+          <label class="field">
+            <span>名前</span>
+            <input id="name" name="name" type="text" placeholder="例：山田 花子" autocomplete="name" required>
+          </label>
+          <label class="field">
+            <span>表示名</span>
+            <input id="display-name" name="displayName" type="text" placeholder="例：はな" required>
+          </label>
+          <button class="button button-primary button-wide" type="submit">保存して次へ <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="form-note">この試作版では入力内容を保存しません。</p>
+      </div>
+    </section>
+
+    <section class="page dashboard-page" id="main-page" aria-labelledby="main-title" hidden>
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">TODAY'S QUEST</p>
+          <h1 id="main-title"><span id="greeting">今日も一歩ずつ。</span></h1>
+        </div>
+        <button class="button button-primary" type="button" data-page="task">＋ タスク追加</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <aside class="panel character-card">
+          <span class="level-badge">LEVEL <strong id="character-level">1</strong></span>
+          <div class="character-stage">
+            <div class="character-placeholder" id="character-placeholder" aria-hidden="true">
+              <span>•ᴗ•</span>
+            </div>
+            <img id="character-image" src="character1.png" alt="レベル1のキャラクター">
+          </div>
+          <div class="character-copy">
+            <h2>かけだしタマゴ</h2>
+            <p>課題を終えて、いっしょに成長しよう。</p>
+          </div>
+        </aside>
+
+        <section class="panel task-panel" aria-labelledby="task-list-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">ASSIGNMENTS</p>
+              <h2 id="task-list-title">タスク一覧</h2>
+            </div>
+            <span class="count-badge">0件</span>
+          </div>
+
+          <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">✓</div>
+            <h3>タスクはまだありません</h3>
+            <p>課題を登録すると、ここに一覧で表示されます。</p>
+            <button class="text-button" type="button" data-page="task">最初のタスクを追加する →</button>
+          </div>
+        </section>
+
+        <section class="panel gacha-card" aria-labelledby="gacha-title">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">CAPSULE STOCK</p>
+              <h2 id="gacha-title">ガチャボール</h2>
+            </div>
+            <span class="count-badge">0個</span>
+          </div>
+          <div class="ball-area">
+            <p>タスク1件につき<br>ボールが1個入ります</p>
+          </div>
+        </section>
+
+        <section class="cups-area" aria-label="成長ゲージ">
+          <article class="cup-card cup-card-juice">
+            <div class="cup-copy">
+              <small>JUICE</small>
+              <strong>ジュース</strong>
+              <span>0 / 5</span>
+            </div>
+            <div class="cup" aria-label="ジュース 0 / 5">
+              <i class="straw"></i>
+              <i class="cup-fill juice-fill"></i>
+              <span class="cup-lines" aria-hidden="true"></span>
+            </div>
+          </article>
+
+          <article class="cup-card cup-card-skull">
+            <div class="cup-copy">
+              <small>SKULL</small>
+              <strong>ドクロ</strong>
+              <span>0 / 5</span>
+            </div>
+            <div class="cup" aria-label="ドクロ 0 / 5">
+              <i class="straw"></i>
+              <i class="cup-fill skull-fill"></i>
+              <span class="skull-mark" aria-hidden="true">☠</span>
+              <span class="cup-lines" aria-hidden="true"></span>
+            </div>
+          </article>
+        </section>
+      </div>
+    </section>
+
+    <section class="page task-form-page" id="task-page" aria-labelledby="task-title" hidden>
+      <div class="form-page-heading">
+        <button class="back-button" type="button" data-page="main" aria-label="メインページへ戻る">←</button>
+        <div>
+          <p class="eyebrow">NEW ASSIGNMENT</p>
+          <h1 id="task-title">タスクを追加</h1>
+          <p>課題の予定を整理しましょう。</p>
+        </div>
+      </div>
+
+      <form id="task-form" class="panel task-form">
+        <label class="field field-full">
+          <span>課題名 <em>必須</em></span>
+          <input name="title" type="text" placeholder="例：心理学レポート" required>
+        </label>
+        <label class="field">
+          <span>締切日 <em>必須</em></span>
+          <input name="deadline" type="date" required>
+        </label>
+        <label class="field">
+          <span>所要時間（分） <em>必須</em></span>
+          <input name="duration" type="number" min="1" step="1" placeholder="例：90" required>
+        </label>
+        <label class="field field-full">
+          <span>メモ</span>
+          <textarea name="memo" rows="5" placeholder="提出形式や参考資料など"></textarea>
+        </label>
+        <div class="form-actions field-full">
+          <button class="button button-secondary" type="button" data-page="main">戻る</button>
+          <button class="button button-primary" type="submit">登録する</button>
+        </div>
+        <p class="form-note field-full">この段階ではタスクは保存されません。</p>
+      </form>
+    </section>
+  </main>
+
+  <template id="task-card-template">
+    <article class="task-card">
+      <h3 data-task-title></h3>
+      <dl>
+        <div><dt>締切</dt><dd data-task-deadline></dd></div>
+        <div><dt>所要時間</dt><dd data-task-duration></dd></div>
+      </dl>
+      <p data-task-memo></p>
+      <div class="task-actions">
+        <button type="button">完了</button>
+        <button type="button" data-overdue-action>未完了</button>
+        <button type="button">削除</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
