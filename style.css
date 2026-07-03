@@ -561,7 +561,70 @@ h1 {
 .form-actions { display: flex; justify-content: flex-end; gap: 11px; padding-top: 4px; }
 .form-actions .button { min-width: 125px; }
 
-.task-card { padding: 16px; border: 1px solid #d8d8df; border-left: 4px solid var(--orange); border-radius: 5px; background: #fff; }
+.task-list {
+  display: grid;
+  gap: 11px;
+  padding-top: 14px;
+}
+
+.task-list .empty-state { padding-top: 16px; }
+
+.task-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px;
+  border: 1px solid #d8d8df;
+  border-left: 4px solid var(--orange);
+  border-radius: 5px;
+  background: #fff;
+}
+
+.task-card-content { min-width: 0; }
+.task-card h3 { margin-bottom: 9px; color: var(--ink); font-size: 15px; }
+
+.task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+}
+
+.task-meta div { display: flex; align-items: center; gap: 6px; }
+.task-meta dt { color: var(--muted); font-size: 10px; font-weight: 700; }
+.task-meta dd { margin: 0; color: var(--text); font-size: 11px; font-weight: 700; }
+
+.task-memo {
+  margin: 9px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.task-memo:empty { display: none; }
+
+.task-actions {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 7px;
+}
+
+.task-button {
+  min-height: 35px;
+  padding: 0 12px;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.task-button-complete { color: #376f2c; border: 1px solid #86b878; background: var(--green-soft); }
+.task-button-delete { color: #8a3b3b; border: 1px solid #d8aaaa; }
+.task-button:hover { filter: brightness(.97); }
+
 .task-card.is-overdue { border: 2px solid var(--red); }
 
 @media (max-width: 1040px) {
@@ -593,6 +656,8 @@ h1 {
       "tasks";
   }
   .task-panel { min-height: 410px; }
+  .task-card { align-items: stretch; flex-direction: column; }
+  .task-actions { justify-content: flex-end; }
   .task-form-page { padding-top: 30px; }
   .task-form { grid-template-columns: 1fr; padding: 24px 20px; }
   .field-full { grid-column: auto; }
