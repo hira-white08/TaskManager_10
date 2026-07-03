@@ -624,10 +624,9 @@ h1 {
 .task-button-complete { color: #376f2c; border: 1px solid #86b878; background: var(--green-soft); }
 .task-button-missed { color: #a02525; border: 1px solid var(--red); background: #fff0f0; }
 .task-button-delete { color: #8a3b3b; border: 1px solid #d8aaaa; }
-.task-button[hidden] { display: none; }
 .task-button:hover { filter: brightness(.97); }
 
-.task-card.is-overdue {
+.task-card.overdue {
   border: 2px solid var(--red);
   box-shadow: 0 0 0 2px rgba(232, 76, 76, .08);
 }
