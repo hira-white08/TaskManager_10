@@ -289,7 +289,7 @@ function initializeApp() {
 
       if (taskSort.value === "duration") {
         const durationDifference =
-          firstTask.estimatedMinutes - secondTask.estimatedMinutes;
+          secondTask.estimatedMinutes - firstTask.estimatedMinutes;
 
         if (durationDifference !== 0) return durationDifference;
       }
