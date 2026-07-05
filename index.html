@@ -79,7 +79,16 @@
               <p class="section-kicker">ASSIGNMENTS</p>
               <h2 id="task-list-title">タスク一覧</h2>
             </div>
-            <span class="count-badge" id="task-count">0件</span>
+            <div class="task-list-controls">
+              <label class="sort-control" for="task-sort">
+                <span>並び替え</span>
+                <select id="task-sort" name="taskSort">
+                  <option value="deadline" selected>締切順</option>
+                  <option value="duration">所要時間順</option>
+                </select>
+              </label>
+              <span class="count-badge" id="task-count">0件</span>
+            </div>
           </div>
 
           <div class="task-list" id="task-list" aria-live="polite">
