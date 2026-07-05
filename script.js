@@ -269,15 +269,20 @@ function initializeApp() {
     });
   }
 
+  function compareByDurationDescending(a, b) {
+    return Number(b.estimatedMinutes) - Number(a.estimatedMinutes);
+  }
+
   function sortTaskGroup(taskGroup) {
-    return [...taskGroup].sort((firstTask, secondTask) => {
+    return [...taskGroup].sort((a, b) => {
       if (taskSort.value === "duration") {
-        const durationDifference =
-          Number(secondTask.estimatedMinutes) -
-          Number(firstTask.estimatedMinutes);
+        const durationDifference = compareByDurationDescending(a, b);
 
         if (durationDifference !== 0) return durationDifference;
       }
+
+      const firstTask = a;
+      const secondTask = b;
 
       const deadlineDifference =
         createDeadlineDate(firstTask) - createDeadlineDate(secondTask);
