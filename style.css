@@ -549,11 +549,36 @@ h1 {
   transform: rotate(8deg);
 }
 
-.cup-fill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; border-radius: 0 0 10px 10px; }
-.juice-fill { background: var(--yellow); }
-.skull-fill { background: var(--purple); }
-.cup-lines { position: absolute; inset: 0; background: repeating-linear-gradient(to bottom, transparent 0 16px, rgba(25, 22, 79, .17) 17px); }
-.skull-mark { position: absolute; inset: 0; display: grid; place-items: center; color: #5e5771; font-size: 25px; }
+.cup-blocks {
+  position: absolute;
+  inset: 5px 5px 6px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  overflow: hidden;
+  border-radius: 2px 2px 8px 8px;
+}
+
+.cup-block {
+  flex: 1;
+  border: 1px solid rgba(25, 22, 79, .18);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, .55);
+}
+
+.cup-block.juice-block.is-filled { background: var(--yellow); }
+.cup-block.skull-block.is-filled { background: var(--purple); }
+
+.skull-mark {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #5e5771;
+  font-size: 25px;
+  pointer-events: none;
+}
 
 .task-form-page { max-width: 800px; margin: 0 auto; padding: 44px 0 64px; }
 
