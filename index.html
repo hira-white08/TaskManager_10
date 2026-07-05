@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="課題を楽しく管理する大学生向けタスク管理アプリ">
   <title>Task Capsule</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=task-list-scroll-4">
 </head>
 <body>
   <header class="site-header">
@@ -73,7 +73,7 @@
           </div>
         </aside>
 
-        <section class="panel task-panel" aria-labelledby="task-list-title">
+        <section class="panel task-panel task-list-panel" aria-labelledby="task-list-title">
           <div class="section-heading">
             <div>
               <p class="section-kicker">ASSIGNMENTS</p>
@@ -91,7 +91,7 @@
             </div>
           </div>
 
-          <div class="task-list" id="task-list" aria-live="polite">
+          <div class="task-list task-list-scroll" id="task-list" aria-live="polite">
             <div class="empty-state">
               <div class="empty-icon" aria-hidden="true">✓</div>
               <h3>タスクはまだありません</h3>
