@@ -29,6 +29,7 @@ function initializeApp() {
   const taskForm = document.getElementById("task-form");
   const taskList = document.getElementById("task-list");
   const taskCount = document.getElementById("task-count");
+  const taskSort = document.getElementById("task-sort");
   const taskCardTemplate = document.getElementById("task-card-template");
   const gachaCount = document.getElementById("gacha-count");
   const gachaBalls = document.getElementById("gacha-balls");
@@ -282,8 +283,22 @@ function initializeApp() {
       const firstIsOverdue = isOverdue(firstTask);
       const secondIsOverdue = isOverdue(secondTask);
 
-      if (firstIsOverdue === secondIsOverdue) return 0;
-      return firstIsOverdue ? -1 : 1;
+      if (firstIsOverdue !== secondIsOverdue) {
+        return firstIsOverdue ? -1 : 1;
+      }
+
+      if (taskSort.value === "duration") {
+        const durationDifference =
+          firstTask.estimatedMinutes - secondTask.estimatedMinutes;
+
+        if (durationDifference !== 0) return durationDifference;
+      }
+
+      const deadlineDifference =
+        createDeadlineDate(firstTask) - createDeadlineDate(secondTask);
+
+      if (deadlineDifference !== 0) return deadlineDifference;
+      return firstTask.id - secondTask.id;
     });
 
     sortedTasks.forEach((task) => {
@@ -352,6 +367,8 @@ function initializeApp() {
     renderCharacter();
     removeTask(taskId);
   });
+
+  taskSort.addEventListener("change", renderTasks);
 
   profileForm.addEventListener("submit", (event) => {
     event.preventDefault();
