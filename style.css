@@ -379,9 +379,15 @@ h1 {
 
 .task-panel {
   grid-area: tasks;
-  min-height: 525px;
+  height: 525px;
+  min-height: 0;
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
+
+.task-panel > .section-heading { flex: 0 0 auto; }
 
 .section-heading {
   display: flex;
@@ -630,9 +636,24 @@ h1 {
 .form-actions .button { min-width: 125px; }
 
 .task-list {
+  flex: 1 1 auto;
+  min-height: 0;
   display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 11px;
-  padding-top: 14px;
+  padding: 14px 7px 8px 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #aeb9d8 transparent;
+}
+
+.task-list::-webkit-scrollbar { width: 7px; }
+.task-list::-webkit-scrollbar-track { background: transparent; }
+.task-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #aeb9d8;
 }
 
 .task-list .empty-state { padding-top: 16px; }
@@ -727,7 +748,7 @@ h1 {
       "cups"
       "tasks";
   }
-  .task-panel { min-height: 410px; }
+  .task-panel { height: 520px; min-height: 0; }
   .task-card { align-items: stretch; flex-direction: column; }
   .task-actions { justify-content: flex-end; }
   .task-form-page { padding-top: 30px; }
