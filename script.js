@@ -47,6 +47,7 @@ function initializeApp() {
   const characterLevelElement = document.getElementById("character-level");
   const characterImage = document.getElementById("character-image");
   const characterPlaceholder = document.getElementById("character-placeholder");
+  const characterFallbackText = document.getElementById("character-fallback-text");
 
   function showPage(pageName) {
     Object.entries(pages).forEach(([name, page]) => {
@@ -143,8 +144,22 @@ function initializeApp() {
     }
   }
 
-  function renderCharacterLevel() {
+  function renderCharacter() {
+    const imagePath = "images/character" + characterLevel + ".png";
+    const imageLabel = "キャラクター画像（" + characterLevel + "）";
+
     characterLevelElement.textContent = String(characterLevel);
+    characterFallbackText.textContent = imageLabel;
+    characterPlaceholder.setAttribute("aria-label", imageLabel);
+    characterImage.alt = imageLabel;
+    characterImage.hidden = false;
+    characterPlaceholder.hidden = true;
+
+    if (characterImage.getAttribute("src") !== imagePath) {
+      characterImage.setAttribute("src", imagePath);
+    } else if (characterImage.complete && characterImage.naturalWidth === 0) {
+      showCharacterPlaceholder();
+    }
   }
 
   function renderGachaBalls() {
@@ -252,7 +267,7 @@ function initializeApp() {
 
     handleFullCups();
     renderCups();
-    renderCharacterLevel();
+    renderCharacter();
     removeTask(taskId);
   });
 
@@ -304,16 +319,13 @@ function initializeApp() {
   }
 
   characterImage.addEventListener("load", () => {
+    characterImage.hidden = false;
     characterPlaceholder.hidden = true;
   });
 
   characterImage.addEventListener("error", showCharacterPlaceholder);
 
-  if (characterImage.complete && characterImage.naturalWidth === 0) {
-    showCharacterPlaceholder();
-  }
-
   renderCups();
-  renderCharacterLevel();
+  renderCharacter();
   renderTasks();
 }
