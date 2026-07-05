@@ -663,7 +663,7 @@ h1 {
   background: #aeb9d8;
 }
 
-.task-list .empty-state { padding-top: 16px; }
+.task-list-scroll .empty-state { min-height: 100%; padding-top: 16px; }
 
 .task-card {
   display: flex;
