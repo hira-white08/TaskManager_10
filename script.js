@@ -21,6 +21,8 @@ function initializeApp() {
   const taskList = document.getElementById("task-list");
   const taskCount = document.getElementById("task-count");
   const taskCardTemplate = document.getElementById("task-card-template");
+  const gachaCount = document.getElementById("gacha-count");
+  const gachaBalls = document.getElementById("gacha-balls");
   const taskTitleInput = document.getElementById("task-title-input");
   const taskDeadlineInput = document.getElementById("task-deadline-input");
   const taskDeadlineTimeInput = document.getElementById("task-deadline-time-input");
@@ -90,9 +92,35 @@ function initializeApp() {
     return emptyState;
   }
 
+  function renderGachaBalls() {
+    const ballColors = ["#f59baa", "#ffd15d", "#83c0e9", "#9bc982", "#a986c1", "#f49a5b"];
+
+    gachaBalls.replaceChildren();
+    gachaCount.textContent = tasks.length + "個";
+
+    if (tasks.length === 0) {
+      const emptyMessage = document.createElement("p");
+      emptyMessage.className = "gacha-empty";
+      emptyMessage.innerHTML = "タスク1件につき<br>ボールが1個入ります";
+      gachaBalls.append(emptyMessage);
+      return;
+    }
+
+    tasks.forEach(() => {
+      const ball = document.createElement("div");
+      const randomColor = ballColors[Math.floor(Math.random() * ballColors.length)];
+
+      ball.className = "gacha-ball";
+      ball.style.backgroundColor = randomColor;
+      ball.setAttribute("aria-hidden", "true");
+      gachaBalls.append(ball);
+    });
+  }
+
   function renderTasks() {
     taskList.replaceChildren();
     taskCount.textContent = tasks.length + "件";
+    renderGachaBalls();
 
     if (tasks.length === 0) {
       taskList.append(createEmptyState());
