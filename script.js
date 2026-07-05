@@ -3,7 +3,9 @@ let nextTaskId = 1;
 let juiceCount = 0;
 let skullCount = 0;
 let characterLevel = 1;
+let userInfo = null;
 
+const STORAGE_KEY = "taskAppState";
 const CUP_MAX = 5;
 const CHARACTER_LEVEL_MIN = 1;
 const CHARACTER_LEVEL_MAX = 5;
@@ -43,11 +45,90 @@ function initializeApp() {
   const taskMemoInput = document.getElementById("task-memo-input");
   const pageLabel = document.getElementById("page-label");
   const greeting = document.getElementById("greeting");
+  const nameInput = document.getElementById("name");
   const displayNameInput = document.getElementById("display-name");
   const characterLevelElement = document.getElementById("character-level");
   const characterImage = document.getElementById("character-image");
   const characterPlaceholder = document.getElementById("character-placeholder");
   const characterFallbackText = document.getElementById("character-fallback-text");
+
+  function saveState() {
+    const state = {
+      userInfo,
+      tasks,
+      juiceCount,
+      skullCount,
+      characterLevel
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function loadState() {
+    const savedText = localStorage.getItem(STORAGE_KEY);
+    if (!savedText) return;
+
+    try {
+      const savedState = JSON.parse(savedText);
+
+      if (
+        savedState.userInfo &&
+        typeof savedState.userInfo.name === "string" &&
+        typeof savedState.userInfo.displayName === "string"
+      ) {
+        userInfo = {
+          name: savedState.userInfo.name,
+          displayName: savedState.userInfo.displayName
+        };
+      }
+
+      if (Array.isArray(savedState.tasks)) {
+        savedState.tasks.forEach((task) => {
+          if (
+            !task ||
+            typeof task.title !== "string" ||
+            typeof task.deadline !== "string"
+          ) {
+            return;
+          }
+
+          const taskId = Number(task.id);
+          const minutes = Number(task.estimatedMinutes);
+
+          tasks.push({
+            id: Number.isFinite(taskId) ? taskId : nextTaskId,
+            title: task.title,
+            deadline: task.deadline,
+            deadlineTime:
+              typeof task.deadlineTime === "string" ? task.deadlineTime : "23:59",
+            estimatedMinutes:
+              Number.isFinite(minutes) && minutes > 0 ? minutes : 1,
+            memo: typeof task.memo === "string" ? task.memo : ""
+          });
+        });
+
+        nextTaskId =
+          tasks.reduce((largestId, task) => Math.max(largestId, task.id), 0) + 1;
+      }
+
+      if (Number.isInteger(savedState.juiceCount)) {
+        juiceCount = Math.min(Math.max(savedState.juiceCount, 0), CUP_MAX - 1);
+      }
+
+      if (Number.isInteger(savedState.skullCount)) {
+        skullCount = Math.min(Math.max(savedState.skullCount, 0), CUP_MAX - 1);
+      }
+
+      if (Number.isInteger(savedState.characterLevel)) {
+        characterLevel = Math.min(
+          Math.max(savedState.characterLevel, CHARACTER_LEVEL_MIN),
+          CHARACTER_LEVEL_MAX
+        );
+      }
+    } catch (error) {
+      console.warn("保存データを読み込めませんでした。", error);
+    }
+  }
 
   function showPage(pageName) {
     Object.entries(pages).forEach(([name, page]) => {
@@ -239,6 +320,7 @@ function initializeApp() {
     if (taskIndex === -1) return;
 
     tasks.splice(taskIndex, 1);
+    saveState();
     renderTasks();
   }
 
@@ -274,7 +356,12 @@ function initializeApp() {
   profileForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    const name = nameInput.value.trim();
     const displayName = displayNameInput.value.trim();
+
+    userInfo = { name, displayName };
+    saveState();
+
     greeting.textContent = displayName + "さん、今日も一歩ずつ。";
     showPage("main");
   });
@@ -308,6 +395,7 @@ function initializeApp() {
     });
 
     nextTaskId += 1;
+    saveState();
     taskForm.reset();
     renderTasks();
     showPage("main");
@@ -325,7 +413,17 @@ function initializeApp() {
 
   characterImage.addEventListener("error", showCharacterPlaceholder);
 
+  loadState();
   renderCups();
   renderCharacter();
   renderTasks();
+
+  if (userInfo) {
+    nameInput.value = userInfo.name;
+    displayNameInput.value = userInfo.displayName;
+    greeting.textContent = userInfo.displayName + "さん、今日も一歩ずつ。";
+    showPage("main");
+  } else {
+    showPage("welcome");
+  }
 }
