@@ -1,5 +1,9 @@
 const tasks = [];
 let nextTaskId = 1;
+let juiceCount = 0;
+let skullCount = 0;
+
+const CUP_MAX = 5;
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
@@ -23,6 +27,12 @@ function initializeApp() {
   const taskCardTemplate = document.getElementById("task-card-template");
   const gachaCount = document.getElementById("gacha-count");
   const gachaBalls = document.getElementById("gacha-balls");
+  const juiceCountElement = document.getElementById("juice-count");
+  const skullCountElement = document.getElementById("skull-count");
+  const juiceCup = document.getElementById("juice-cup");
+  const skullCup = document.getElementById("skull-cup");
+  const juiceBlocks = document.getElementById("juice-blocks");
+  const skullBlocks = document.getElementById("skull-blocks");
   const taskTitleInput = document.getElementById("task-title-input");
   const taskDeadlineInput = document.getElementById("task-deadline-input");
   const taskDeadlineTimeInput = document.getElementById("task-deadline-time-input");
@@ -90,6 +100,31 @@ function initializeApp() {
 
     emptyState.append(icon, title, description, addButton);
     return emptyState;
+  }
+
+  function renderCupBlocks(container, count, type) {
+    container.replaceChildren();
+
+    for (let index = 0; index < CUP_MAX; index += 1) {
+      const block = document.createElement("div");
+      block.className = "cup-block " + type;
+
+      if (index < count) {
+        block.classList.add("is-filled");
+      }
+
+      container.append(block);
+    }
+  }
+
+  function renderCups() {
+    juiceCountElement.textContent = juiceCount + " / " + CUP_MAX;
+    skullCountElement.textContent = skullCount + " / " + CUP_MAX;
+    juiceCup.setAttribute("aria-label", "ジュース " + juiceCount + " / " + CUP_MAX);
+    skullCup.setAttribute("aria-label", "ドクロ " + skullCount + " / " + CUP_MAX);
+
+    renderCupBlocks(juiceBlocks, juiceCount, "juice-block");
+    renderCupBlocks(skullBlocks, skullCount, "skull-block");
   }
 
   function renderGachaBalls() {
@@ -186,7 +221,17 @@ function initializeApp() {
     const taskCard = actionButton.closest("[data-task-id]");
     if (!taskCard) return;
 
-    removeTask(Number(taskCard.dataset.taskId));
+    const taskId = Number(taskCard.dataset.taskId);
+    const action = actionButton.dataset.action;
+
+    if (action === "complete") {
+      juiceCount = Math.min(juiceCount + 1, CUP_MAX);
+    } else if (action === "missed") {
+      skullCount = Math.min(skullCount + 1, CUP_MAX);
+    }
+
+    renderCups();
+    removeTask(taskId);
   });
 
   profileForm.addEventListener("submit", (event) => {
@@ -246,5 +291,6 @@ function initializeApp() {
     showCharacterPlaceholder();
   }
 
+  renderCups();
   renderTasks();
 }
