@@ -348,9 +348,13 @@ h1 {
   place-items: center;
   border: 3px solid var(--ink);
   border-radius: 52% 48% 43% 46%;
+  padding: 22px;
   background: #fffefa;
-  font-size: 27px;
+  color: var(--ink);
+  font-size: 13px;
   font-weight: 800;
+  line-height: 1.6;
+  text-align: center;
   transform: rotate(-1deg);
 }
 
