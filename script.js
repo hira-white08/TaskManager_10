@@ -2,8 +2,11 @@ const tasks = [];
 let nextTaskId = 1;
 let juiceCount = 0;
 let skullCount = 0;
+let characterLevel = 1;
 
 const CUP_MAX = 5;
+const CHARACTER_LEVEL_MIN = 1;
+const CHARACTER_LEVEL_MAX = 5;
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
@@ -41,6 +44,7 @@ function initializeApp() {
   const pageLabel = document.getElementById("page-label");
   const greeting = document.getElementById("greeting");
   const displayNameInput = document.getElementById("display-name");
+  const characterLevelElement = document.getElementById("character-level");
   const characterImage = document.getElementById("character-image");
   const characterPlaceholder = document.getElementById("character-placeholder");
 
@@ -125,6 +129,22 @@ function initializeApp() {
 
     renderCupBlocks(juiceBlocks, juiceCount, "juice-block");
     renderCupBlocks(skullBlocks, skullCount, "skull-block");
+  }
+
+  function handleFullCups() {
+    if (juiceCount >= CUP_MAX) {
+      characterLevel = Math.min(characterLevel + 1, CHARACTER_LEVEL_MAX);
+      juiceCount = 0;
+    }
+
+    if (skullCount >= CUP_MAX) {
+      characterLevel = Math.max(characterLevel - 1, CHARACTER_LEVEL_MIN);
+      skullCount = 0;
+    }
+  }
+
+  function renderCharacterLevel() {
+    characterLevelElement.textContent = String(characterLevel);
   }
 
   function renderGachaBalls() {
@@ -225,12 +245,14 @@ function initializeApp() {
     const action = actionButton.dataset.action;
 
     if (action === "complete") {
-      juiceCount = Math.min(juiceCount + 1, CUP_MAX);
+      juiceCount += 1;
     } else if (action === "missed") {
-      skullCount = Math.min(skullCount + 1, CUP_MAX);
+      skullCount += 1;
     }
 
+    handleFullCups();
     renderCups();
+    renderCharacterLevel();
     removeTask(taskId);
   });
 
@@ -292,5 +314,6 @@ function initializeApp() {
   }
 
   renderCups();
+  renderCharacterLevel();
   renderTasks();
 }
