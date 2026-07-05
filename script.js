@@ -23,6 +23,7 @@ function initializeApp() {
   const taskCardTemplate = document.getElementById("task-card-template");
   const taskTitleInput = document.getElementById("task-title-input");
   const taskDeadlineInput = document.getElementById("task-deadline-input");
+  const taskDeadlineTimeInput = document.getElementById("task-deadline-time-input");
   const taskDurationInput = document.getElementById("task-duration-input");
   const taskMemoInput = document.getElementById("task-memo-input");
   const pageLabel = document.getElementById("page-label");
@@ -42,26 +43,26 @@ function initializeApp() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function formatDeadline(deadline) {
-    const date = new Date(deadline + "T00:00:00");
+  function createDeadlineDate(task) {
+    const [year, month, day] = task.deadline.split("-").map(Number);
+    const [hours, minutes] = task.deadlineTime.split(":").map(Number);
 
+    return new Date(year, month - 1, day, hours, minutes, 0, 0);
+  }
+
+  function formatDeadline(task) {
     return new Intl.DateTimeFormat("ja-JP", {
       year: "numeric",
       month: "short",
       day: "numeric",
-      weekday: "short"
-    }).format(date);
+      weekday: "short",
+      hour: "2-digit",
+      minute: "2-digit"
+    }).format(createDeadlineDate(task));
   }
 
   function isOverdue(task) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const [year, month, day] = task.deadline.split("-").map(Number);
-    const deadlineDate = new Date(year, month - 1, day);
-    deadlineDate.setHours(0, 0, 0, 0);
-
-    return deadlineDate < today;
+    return createDeadlineDate(task) < new Date();
   }
 
   function createEmptyState() {
@@ -127,7 +128,7 @@ function initializeApp() {
       }
 
       taskCard.querySelector("[data-task-title]").textContent = task.title;
-      taskCard.querySelector("[data-task-deadline]").textContent = formatDeadline(task.deadline);
+      taskCard.querySelector("[data-task-deadline]").textContent = formatDeadline(task);
       taskCard.querySelector("[data-task-duration]").textContent = task.estimatedMinutes + "分";
       taskCard.querySelector("[data-task-memo]").textContent = task.memo || "メモなし";
 
@@ -173,10 +174,17 @@ function initializeApp() {
 
     const title = taskTitleInput.value.trim();
     const deadline = taskDeadlineInput.value;
+    const deadlineTime = taskDeadlineTimeInput.value;
     const estimatedMinutes = Number(taskDurationInput.value);
     const memo = taskMemoInput.value.trim();
 
-    if (!title || !deadline || !Number.isFinite(estimatedMinutes) || estimatedMinutes < 1) {
+    if (
+      !title ||
+      !deadline ||
+      !deadlineTime ||
+      !Number.isFinite(estimatedMinutes) ||
+      estimatedMinutes < 1
+    ) {
       return;
     }
 
@@ -184,6 +192,7 @@ function initializeApp() {
       id: nextTaskId,
       title,
       deadline,
+      deadlineTime,
       estimatedMinutes,
       memo
     });
