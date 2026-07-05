@@ -269,27 +269,12 @@ function initializeApp() {
     });
   }
 
-  function renderTasks() {
-    taskList.replaceChildren();
-    taskCount.textContent = tasks.length + "件";
-    renderGachaBalls();
-
-    if (tasks.length === 0) {
-      taskList.append(createEmptyState());
-      return;
-    }
-
-    const sortedTasks = [...tasks].sort((firstTask, secondTask) => {
-      const firstIsOverdue = isOverdue(firstTask);
-      const secondIsOverdue = isOverdue(secondTask);
-
-      if (firstIsOverdue !== secondIsOverdue) {
-        return firstIsOverdue ? -1 : 1;
-      }
-
+  function sortTaskGroup(taskGroup) {
+    return [...taskGroup].sort((firstTask, secondTask) => {
       if (taskSort.value === "duration") {
         const durationDifference =
-          secondTask.estimatedMinutes - firstTask.estimatedMinutes;
+          Number(secondTask.estimatedMinutes) -
+          Number(firstTask.estimatedMinutes);
 
         if (durationDifference !== 0) return durationDifference;
       }
@@ -300,6 +285,24 @@ function initializeApp() {
       if (deadlineDifference !== 0) return deadlineDifference;
       return firstTask.id - secondTask.id;
     });
+  }
+
+  function renderTasks() {
+    taskList.replaceChildren();
+    taskCount.textContent = tasks.length + "件";
+    renderGachaBalls();
+
+    if (tasks.length === 0) {
+      taskList.append(createEmptyState());
+      return;
+    }
+
+    const overdueTasks = tasks.filter((task) => isOverdue(task));
+    const upcomingTasks = tasks.filter((task) => !isOverdue(task));
+    const sortedTasks = [
+      ...sortTaskGroup(overdueTasks),
+      ...sortTaskGroup(upcomingTasks)
+    ];
 
     sortedTasks.forEach((task) => {
       const taskCard = taskCardTemplate.content.firstElementChild.cloneNode(true);
