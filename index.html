@@ -5,15 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="課題を楽しく管理する大学生向けタスク管理アプリ">
   <title>Task Capsule</title>
-  <link rel="stylesheet" href="style.css?v=task-list-scroll-4">
+  <link rel="stylesheet" href="style.css?v=ui-refine-reset">
 </head>
 <body>
   <header class="site-header">
-    <button class="brand" type="button" data-page="main" aria-label="メインページへ">
-      <span class="brand-icon" aria-hidden="true"></span>
-      <span>Task Capsule</span>
-    </button>
-    <span class="page-label" id="page-label">はじめる</span>
+    <div class="brand-area">
+      <div class="brand" aria-label="Task Capsule">
+        <span class="brand-icon" aria-hidden="true"></span>
+        <span>TASK CAPSULE</span>
+      </div>
+      <span class="header-nickname" id="header-nickname"></span>
+    </div>
+    <div class="header-actions">
+      <button class="header-button" id="home-button" type="button">ホーム</button>
+      <button class="header-button header-button-reset" id="reset-button" type="button">リセット</button>
+    </div>
   </header>
 
   <main class="app">
@@ -40,7 +46,7 @@
             <input id="name" name="name" type="text" placeholder="例：山田 花子" autocomplete="name" required>
           </label>
           <label class="field">
-            <span>表示名</span>
+            <span>ニックネーム</span>
             <input id="display-name" name="displayName" type="text" placeholder="例：はな" required>
           </label>
           <button class="button button-primary button-wide" type="submit">保存して次へ <span aria-hidden="true">→</span></button>
@@ -49,12 +55,8 @@
       </div>
     </section>
 
-    <section class="page dashboard-page" id="main-page" aria-labelledby="main-title" hidden>
+    <section class="page dashboard-page" id="main-page" aria-label="メインページ" hidden>
       <div class="page-heading">
-        <div>
-          <p class="eyebrow">TODAY'S QUEST</p>
-          <h1 id="main-title"><span id="greeting">今日も一歩ずつ。</span></h1>
-        </div>
         <button class="button button-primary" type="button" data-page="task">＋ タスク追加</button>
       </div>
 
@@ -69,14 +71,12 @@
           </div>
           <div class="character-copy">
             <h2>かけだしタマゴ</h2>
-            <p>課題を終えて、いっしょに成長しよう。</p>
           </div>
         </aside>
 
         <section class="panel task-panel task-list-panel" aria-labelledby="task-list-title">
           <div class="section-heading">
             <div>
-              <p class="section-kicker">ASSIGNMENTS</p>
               <h2 id="task-list-title">タスク一覧</h2>
             </div>
             <div class="task-list-controls">
@@ -104,10 +104,8 @@
         <section class="panel gacha-card" aria-labelledby="gacha-title">
           <div class="section-heading">
             <div>
-              <p class="section-kicker">CAPSULE STOCK</p>
-              <h2 id="gacha-title">ガチャボール</h2>
+              <h2 id="gacha-title">タスクボール</h2>
             </div>
-            <span class="count-badge" id="gacha-count">0個</span>
           </div>
           <div class="ball-area" id="gacha-balls" aria-live="polite">
             <p class="gacha-empty">タスク1件につき<br>ボールが1個入ります</p>
@@ -118,19 +116,18 @@
           <article class="cup-card cup-card-juice">
             <div class="cup-copy">
               <small>JUICE</small>
-              <strong>ジュース</strong>
               <span id="juice-count">0 / 5</span>
             </div>
             <div class="cup" id="juice-cup" aria-label="ジュース 0 / 5">
               <i class="straw"></i>
               <div class="cup-blocks" id="juice-blocks" aria-hidden="true"></div>
+              <span class="juice-mark" aria-hidden="true">✚</span>
             </div>
           </article>
 
           <article class="cup-card cup-card-skull">
             <div class="cup-copy">
               <small>SKULL</small>
-              <strong>ドクロ</strong>
               <span id="skull-count">0 / 5</span>
             </div>
             <div class="cup" id="skull-cup" aria-label="ドクロ 0 / 5">
@@ -200,6 +197,6 @@
     </article>
   </template>
 
-  <script src="script.js?v=12-duration-desc"></script>
+  <script src="script.js?v=ui-refine-reset"></script>
 </body>
 </html>
