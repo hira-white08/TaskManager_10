@@ -19,19 +19,12 @@ function initializeApp() {
     task: document.getElementById("task-page")
   };
 
-  const pageLabels = {
-    welcome: "はじめる",
-    main: "ホーム",
-    task: "タスク登録"
-  };
-
-  const profileForm = document.getElementById("profile-form");
+   const profileForm = document.getElementById("profile-form");
   const taskForm = document.getElementById("task-form");
   const taskList = document.getElementById("task-list");
   const taskCount = document.getElementById("task-count");
   const taskSort = document.getElementById("task-sort");
   const taskCardTemplate = document.getElementById("task-card-template");
-  const gachaCount = document.getElementById("gacha-count");
   const gachaBalls = document.getElementById("gacha-balls");
   const juiceCountElement = document.getElementById("juice-count");
   const skullCountElement = document.getElementById("skull-count");
@@ -44,8 +37,9 @@ function initializeApp() {
   const taskDeadlineTimeInput = document.getElementById("task-deadline-time-input");
   const taskDurationInput = document.getElementById("task-duration-input");
   const taskMemoInput = document.getElementById("task-memo-input");
-  const pageLabel = document.getElementById("page-label");
-  const greeting = document.getElementById("greeting");
+  const headerNickname = document.getElementById("header-nickname");
+  const homeButton = document.getElementById("home-button");
+  const resetButton = document.getElementById("reset-button");
   const nameInput = document.getElementById("name");
   const displayNameInput = document.getElementById("display-name");
   const characterLevelElement = document.getElementById("character-level");
@@ -138,8 +132,27 @@ function initializeApp() {
       page.classList.toggle("is-active", isCurrentPage);
     });
 
-    pageLabel.textContent = pageLabels[pageName];
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function updateHeaderNickname() {
+    headerNickname.textContent = userInfo ? userInfo.displayName + "さん" : "";
+  }
+
+  function resetProgress() {
+    tasks.length = 0;
+    nextTaskId = 1;
+    juiceCount = 0;
+    skullCount = 0;
+    characterLevel = 1;
+    taskSort.value = "deadline";
+    taskForm.reset();
+
+    saveState();
+    renderCups();
+    renderCharacter();
+    renderTasks();
+    showPage(userInfo ? "main" : "welcome");
   }
 
   function createDeadlineDate(task) {
@@ -248,8 +261,6 @@ function initializeApp() {
     const ballColors = ["#f59baa", "#ffd15d", "#83c0e9", "#9bc982", "#a986c1", "#f49a5b"];
 
     gachaBalls.replaceChildren();
-    gachaCount.textContent = tasks.length + "個";
-
     if (tasks.length === 0) {
       const emptyMessage = document.createElement("p");
       emptyMessage.className = "gacha-empty";
@@ -354,6 +365,25 @@ function initializeApp() {
     showPage(navigationButton.dataset.page);
   });
 
+  homeButton.addEventListener("click", () => {
+    if (userInfo) {
+      nameInput.value = userInfo.name;
+      displayNameInput.value = userInfo.displayName;
+    }
+
+    showPage("welcome");
+  });
+
+  resetButton.addEventListener("click", () => {
+    const shouldReset = window.confirm(
+      "本当にリセットしますか？タスクや成長状況がすべて削除されます。"
+    );
+
+    if (shouldReset) {
+      resetProgress();
+    }
+  });
+
   taskList.addEventListener("click", (event) => {
     const actionButton = event.target.closest("[data-action]");
     if (!actionButton) return;
@@ -386,8 +416,7 @@ function initializeApp() {
 
     userInfo = { name, displayName };
     saveState();
-
-    greeting.textContent = displayName + "さん、今日も一歩ずつ。";
+    updateHeaderNickname();
     showPage("main");
   });
 
@@ -439,6 +468,7 @@ function initializeApp() {
   characterImage.addEventListener("error", showCharacterPlaceholder);
 
   loadState();
+  updateHeaderNickname();
   renderCups();
   renderCharacter();
   renderTasks();
@@ -446,7 +476,6 @@ function initializeApp() {
   if (userInfo) {
     nameInput.value = userInfo.name;
     displayNameInput.value = userInfo.displayName;
-    greeting.textContent = userInfo.displayName + "さん、今日も一歩ずつ。";
     showPage("main");
   } else {
     showPage("welcome");
