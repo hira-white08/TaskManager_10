@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="課題を楽しく管理する大学生向けタスク管理アプリ">
   <title>Task Capsule</title>
-  <link rel="stylesheet" href="style.css?v=ui-refine-reset">
+  <link rel="stylesheet" href="style.css?v=fixed-task-colors">
 </head>
 <body>
   <header class="site-header">
@@ -62,12 +62,12 @@
 
       <div class="dashboard-grid">
         <aside class="panel character-card">
-          <span class="level-badge">LEVEL <strong id="character-level">1</strong></span>
+          <span class="level-badge">LEVEL <strong id="character-level">2</strong></span>
           <div class="character-stage">
-            <div class="character-placeholder" id="character-placeholder" role="img" aria-label="キャラクター画像（1）">
-              <span id="character-fallback-text">キャラクター画像（1）</span>
+            <div class="character-placeholder" id="character-placeholder" role="img" aria-label="キャラクター画像（2）">
+              <span id="character-fallback-text">キャラクター画像（2）</span>
             </div>
-            <img id="character-image" src="images/character1.png" alt="キャラクター画像（1）">
+            <img id="character-image" src="images/character2.png" alt="キャラクター画像（2）">
           </div>
           <div class="character-copy">
             <h2>かけだしタマゴ</h2>
@@ -157,7 +157,7 @@
         </label>
         <label class="field">
           <span>締切日 <em>必須</em></span>
-          <input id="task-deadline-input" name="deadline" type="date" required>
+          <input id="task-deadline-input" name="deadline" type="date" min="1000-01-01" max="9999-12-31" title="西暦4桁で入力してください" required>
         </label>
         <label class="field">
           <span>締切時刻 <em>必須</em></span>
@@ -197,6 +197,6 @@
     </article>
   </template>
 
-  <script src="script.js?v=ui-refine-reset"></script>
+  <script src="script.js?v=fixed-task-colors"></script>
 </body>
 </html>
