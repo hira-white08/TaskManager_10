@@ -48,7 +48,6 @@ function initializeApp() {
   const headerNickname = document.getElementById("header-nickname");
   const homeButton = document.getElementById("home-button");
   const resetButton = document.getElementById("reset-button");
-  const nameInput = document.getElementById("name");
   const displayNameInput = document.getElementById("display-name");
   const characterLevelElement = document.getElementById("character-level");
   const characterImage = document.getElementById("character-image");
@@ -86,11 +85,9 @@ function initializeApp() {
 
       if (
         savedState.userInfo &&
-        typeof savedState.userInfo.name === "string" &&
         typeof savedState.userInfo.displayName === "string"
       ) {
         userInfo = {
-          name: savedState.userInfo.name,
           displayName: savedState.userInfo.displayName
         };
       }
@@ -267,7 +264,7 @@ function initializeApp() {
     juiceCountElement.textContent = juiceCount + " / " + CUP_MAX;
     skullCountElement.textContent = skullCount + " / " + CUP_MAX;
     juiceCup.setAttribute("aria-label", "ジュース " + juiceCount + " / " + CUP_MAX);
-    skullCup.setAttribute("aria-label", "ドクロ " + skullCount + " / " + CUP_MAX);
+    skullCup.setAttribute("aria-label", "POISON " + skullCount + " / " + CUP_MAX);
 
     renderCupBlocks(juiceBlocks, juiceCount, "juice-block");
     renderCupBlocks(skullBlocks, skullCount, "skull-block");
@@ -411,7 +408,6 @@ function initializeApp() {
 
   homeButton.addEventListener("click", () => {
     if (userInfo) {
-      nameInput.value = userInfo.name;
       displayNameInput.value = userInfo.displayName;
     }
 
@@ -456,10 +452,9 @@ function initializeApp() {
   profileForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
-    const name = nameInput.value.trim();
     const displayName = displayNameInput.value.trim();
 
-    userInfo = { name, displayName };
+    userInfo = { displayName };
     saveState();
     updateHeaderNickname();
     showPage("main");
@@ -522,7 +517,6 @@ function initializeApp() {
   renderTasks();
 
   if (userInfo) {
-    nameInput.value = userInfo.name;
     displayNameInput.value = userInfo.displayName;
     showPage("main");
   } else {
