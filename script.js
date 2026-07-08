@@ -2,13 +2,21 @@ const tasks = [];
 let nextTaskId = 1;
 let juiceCount = 0;
 let skullCount = 0;
-let characterLevel = 1;
+let characterLevel = 2;
 let userInfo = null;
 
 const STORAGE_KEY = "taskAppState";
 const CUP_MAX = 5;
 const CHARACTER_LEVEL_MIN = 1;
 const CHARACTER_LEVEL_MAX = 5;
+const TASK_BALL_COLORS = [
+  "#f59baa",
+  "#ffd15d",
+  "#83c0e9",
+  "#9bc982",
+  "#a986c1",
+  "#f49a5b"
+];
 
 document.addEventListener("DOMContentLoaded", initializeApp);
 
@@ -47,6 +55,15 @@ function initializeApp() {
   const characterPlaceholder = document.getElementById("character-placeholder");
   const characterFallbackText = document.getElementById("character-fallback-text");
 
+  function createTaskColor(taskId) {
+    const numericId = Number(taskId);
+    const colorIndex = Number.isFinite(numericId)
+      ? Math.abs(Math.trunc(numericId) - 1) % TASK_BALL_COLORS.length
+      : 0;
+
+    return TASK_BALL_COLORS[colorIndex];
+  }
+
   function saveState() {
     const state = {
       userInfo,
@@ -65,6 +82,7 @@ function initializeApp() {
 
     try {
       const savedState = JSON.parse(savedText);
+      let addedMissingColors = false;
 
       if (
         savedState.userInfo &&
@@ -88,17 +106,25 @@ function initializeApp() {
           }
 
           const taskId = Number(task.id);
+          const resolvedTaskId = Number.isFinite(taskId) ? taskId : nextTaskId;
           const minutes = Number(task.estimatedMinutes);
+          const hasSavedColor =
+            typeof task.color === "string" && task.color.trim() !== "";
+
+          if (!hasSavedColor) {
+            addedMissingColors = true;
+          }
 
           tasks.push({
-            id: Number.isFinite(taskId) ? taskId : nextTaskId,
+            id: resolvedTaskId,
             title: task.title,
             deadline: task.deadline,
             deadlineTime:
               typeof task.deadlineTime === "string" ? task.deadlineTime : "23:59",
             estimatedMinutes:
               Number.isFinite(minutes) && minutes > 0 ? minutes : 1,
-            memo: typeof task.memo === "string" ? task.memo : ""
+            memo: typeof task.memo === "string" ? task.memo : "",
+            color: hasSavedColor ? task.color : createTaskColor(resolvedTaskId)
           });
         });
 
@@ -119,6 +145,10 @@ function initializeApp() {
           Math.max(savedState.characterLevel, CHARACTER_LEVEL_MIN),
           CHARACTER_LEVEL_MAX
         );
+      }
+
+      if (addedMissingColors) {
+        saveState();
       }
     } catch (error) {
       console.warn("保存データを読み込めませんでした。", error);
@@ -144,7 +174,7 @@ function initializeApp() {
     nextTaskId = 1;
     juiceCount = 0;
     skullCount = 0;
-    characterLevel = 1;
+    characterLevel = 2;
     taskSort.value = "deadline";
     taskForm.reset();
 
@@ -153,6 +183,22 @@ function initializeApp() {
     renderCharacter();
     renderTasks();
     showPage(userInfo ? "main" : "welcome");
+  }
+
+  function hasFourDigitYear(dateValue) {
+    return /^\d{4}-\d{2}-\d{2}$/.test(dateValue);
+  }
+
+  function validateDeadlineYear() {
+    const isValid =
+      taskDeadlineInput.value === "" ||
+      hasFourDigitYear(taskDeadlineInput.value);
+
+    taskDeadlineInput.setCustomValidity(
+      isValid ? "" : "西暦は4桁で入力してください。"
+    );
+
+    return isValid;
   }
 
   function createDeadlineDate(task) {
@@ -258,8 +304,6 @@ function initializeApp() {
   }
 
   function renderGachaBalls() {
-    const ballColors = ["#f59baa", "#ffd15d", "#83c0e9", "#9bc982", "#a986c1", "#f49a5b"];
-
     gachaBalls.replaceChildren();
     if (tasks.length === 0) {
       const emptyMessage = document.createElement("p");
@@ -269,12 +313,12 @@ function initializeApp() {
       return;
     }
 
-    tasks.forEach(() => {
+    tasks.forEach((task) => {
       const ball = document.createElement("div");
-      const randomColor = ballColors[Math.floor(Math.random() * ballColors.length)];
 
       ball.className = "gacha-ball";
-      ball.style.backgroundColor = randomColor;
+      ball.dataset.taskId = String(task.id);
+      ball.style.backgroundColor = task.color;
       ball.setAttribute("aria-hidden", "true");
       gachaBalls.append(ball);
     });
@@ -407,6 +451,7 @@ function initializeApp() {
   });
 
   taskSort.addEventListener("change", renderTasks);
+  taskDeadlineInput.addEventListener("input", validateDeadlineYear);
 
   profileForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -428,10 +473,12 @@ function initializeApp() {
     const deadlineTime = taskDeadlineTimeInput.value;
     const estimatedMinutes = Number(taskDurationInput.value);
     const memo = taskMemoInput.value.trim();
+    const deadlineYearIsValid = validateDeadlineYear();
 
     if (
       !title ||
       !deadline ||
+      !deadlineYearIsValid ||
       !deadlineTime ||
       !Number.isFinite(estimatedMinutes) ||
       estimatedMinutes < 1
@@ -445,7 +492,8 @@ function initializeApp() {
       deadline,
       deadlineTime,
       estimatedMinutes,
-      memo
+      memo,
+      color: createTaskColor(nextTaskId)
     });
 
     nextTaskId += 1;
