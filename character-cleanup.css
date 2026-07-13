@@ -1,0 +1,17 @@
+.character-placeholder,
+.character-copy {
+  display: none !important;
+}
+
+.character-stage {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+}
+
+.character-stage img {
+  display: block;
+  width: min(100%, 260px);
+  max-height: 280px;
+  object-fit: contain;
+}
