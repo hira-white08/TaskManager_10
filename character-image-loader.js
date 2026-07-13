@@ -5,11 +5,11 @@
     const source = String(value);
     const match = source.match(/(?:^|\/)character([1-5])\.png(?:$|\?)/);
 
-    if (!match || !window.CHARACTER_IMAGE_DATA_URLS) {
+    if (!match) {
       return value;
     }
 
-    return window.CHARACTER_IMAGE_DATA_URLS[match[1]] || value;
+    return "images/" + match[1] + ".png";
   }
 
   Element.prototype.setAttribute = function setAttributeWithCharacterImageMap(name, value) {
@@ -24,7 +24,7 @@
     const characterImage = document.getElementById("character-image");
     if (!characterImage) return;
 
-    const currentSource = characterImage.getAttribute("src") || "images/character2.png";
+    const currentSource = characterImage.getAttribute("src") || "images/2.png";
     characterImage.setAttribute("src", currentSource);
   });
 })();
