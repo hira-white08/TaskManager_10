@@ -42,16 +42,12 @@ TaskManager_10/
 ├─ index.html
 ├─ style.css
 ├─ script.js
-├─ README.md
-└─ images/
-   ├─ character1.png
-   ├─ character2.png
-   ├─ character3.png
-   ├─ character4.png
-   └─ character5.png
+├─ character-images.js
+├─ character-image-loader.js
+└─ README.md
 ```
 
-キャラクター画像が存在しない場合は、レベル番号を含む代替表示が使用されます。
+キャラクター画像は`character-images.js`にPNGデータとして埋め込み、`character-image-loader.js`でレベルに応じた画像へ差し替えます。画像が読み込めない場合は、レベル番号を含む代替表示が使用されます。
 
 ## 使い方
 
@@ -94,7 +90,7 @@ TaskManager_10/
 
 - 初期レベルは2です。
 - レベルは1〜5の範囲です。
-- `images/character1.png`〜`images/character5.png`をレベルに応じて表示します。
+- レベル1〜5に応じて、埋め込み済みのキャラクター画像を表示します。
 - リセット後はレベル2へ戻ります。
 
 ## データ保存
