@@ -6,6 +6,7 @@
   <meta name="description" content="課題を楽しく管理する大学生向けタスク管理アプリ">
   <title>Task Capsule</title>
   <link rel="stylesheet" href="style.css?v=fixed-task-colors">
+  <link rel="stylesheet" href="character-cleanup.css?v=transparent-characters">
 </head>
 <body>
   <header class="site-header">
@@ -60,13 +61,10 @@
         <aside class="panel character-card">
           <span class="level-badge">LEVEL <strong id="character-level">2</strong></span>
           <div class="character-stage">
-            <div class="character-placeholder" id="character-placeholder" role="img" aria-label="キャラクター画像（2）">
-              <span id="character-fallback-text">キャラクター画像（2）</span>
+            <div class="character-placeholder" id="character-placeholder" role="img" aria-label="キャラクター レベル2" hidden>
+              <span id="character-fallback-text" hidden></span>
             </div>
-            <img id="character-image" src="images/character2.png" alt="キャラクター画像（2）">
-          </div>
-          <div class="character-copy">
-            <h2>かけだしタマゴ</h2>
+            <img id="character-image" alt="キャラクター レベル2">
           </div>
         </aside>
 
@@ -193,8 +191,8 @@
     </article>
   </template>
 
-  <script src="character-images.js?v=embedded-character-images"></script>
-  <script src="character-image-loader.js?v=embedded-character-images"></script>
-  <script src="script.js?v=nickname-poison-readme"></script>
+  <script src="character-images.js?v=transparent-characters"></script>
+  <script src="character-image-loader.js?v=transparent-characters"></script>
+  <script src="script.js?v=character-placeholder-cleanup"></script>
 </body>
 </html>
